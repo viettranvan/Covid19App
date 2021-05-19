@@ -20,7 +20,7 @@ class ColumnData extends StatelessWidget {
         ),),
         SizedBox(height: 5.0,),
         Text(this.number,style: TextStyle(
-          fontSize: 20.0,
+          fontSize: 18.0,
           fontWeight: FontWeight.bold,
           color: color
         ),)

@@ -1,10 +1,12 @@
+import 'package:covid_19/api/fetch_total_in_world.dart';
+import 'package:covid_19/models/total_in_world.dart';
 import 'package:covid_19/pages/covid19_information.dart';
 import 'package:covid_19/widgets/column_data.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/avd.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  FetchTotalInWorld fetchTotalInWorld = new FetchTotalInWorld();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,28 +74,44 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.grey,
                               blurRadius: 3.0)
                         ]),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ColumnData(
-                          imgDir: "assets/images/covid19.png",
-                          title: "Tổng số\nca Nhiễm ",
-                          number: "111222",
-                          color: Colors.blue,
-                        ),
-                        ColumnData(
-                          imgDir: "assets/images/death.png",
-                          title: "Số ca \ntử vong",
-                          number: "111222",
-                          color: Colors.red,
-                        ),
-                        ColumnData(
-                          imgDir: "assets/images/recuperate.png",
-                          title: "Số ca \nhồi phục",
-                          number: "111222",
-                          color: Colors.green,
-                        ),
-                      ],
+                    child: FutureBuilder<TotalInWord>(
+                      future: fetchTotalInWorld.fetchDataAllTheWorld(),
+                      builder: (context,snapshot){
+                        final data = snapshot.data;
+                        final formatter = new NumberFormat("###,###,###");
+                        if (snapshot.hasData) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ColumnData(
+                                imgDir: "assets/images/covid19.png",
+                                title: "Tổng số\nca Nhiễm ",
+                                number: formatter.format(int.parse("${data!.total}")),
+                                color: Colors.blue,
+                              ),
+                              ColumnData(
+                                imgDir: "assets/images/death.png",
+                                title: "Số ca \ntử vong",
+                                number: formatter.format(int.parse("${data.death}")),
+                                color: Colors.red,
+                              ),
+                              ColumnData(
+                                imgDir: "assets/images/recuperate.png",
+                                title: "Số ca \nhồi phục",
+                                number: formatter.format(int.parse("${data.recovery}")),
+                                color: Colors.green,
+                              ),
+                            ],
+                          );
+                        }
+                        else if (snapshot.hasError) {
+                          print("has error");
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+
+                      },
                     ),
                   )
                 ],
