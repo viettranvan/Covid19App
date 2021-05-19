@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http: ^0.13.3
+  flutter_svg: ^0.22.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -46,8 +47,18 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+
+  assets:
+    - assets/images/worldmap.jpg
+    - assets/images/virus.png
+    - assets/images/corona_mask.png
+    - assets/images/covid19.png
+    - assets/images/death.png
+    - assets/images/recuperate.png
+    - assets/images/covid19_Info.png
+    - assets/images/doctor.png
+    - assets/icons/coronadr.svg
+    - assets/icons/nurse.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
