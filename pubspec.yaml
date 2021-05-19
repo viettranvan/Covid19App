@@ -57,8 +57,22 @@ flutter:
     - assets/images/recuperate.png
     - assets/images/covid19_Info.png
     - assets/images/doctor.png
+    - assets/images/shortness_of_breath.jpeg
+    - assets/images/heart_attack.png
+    - assets/images/motionless.jpg
+    - assets/images/thermometer.jpg
+    - assets/images/headache.png
+    - assets/images/tired.jpg
+    - assets/images/sore_throat.png
+    - assets/images/stomach.png
+    - assets/images/eye.png
+    - assets/images/nose.jpg
+    - assets/images/red.png
     - assets/icons/coronadr.svg
     - assets/icons/nurse.svg
+    - assets/icons/Clean_Disinfect.svg
+    - assets/icons/hand_wash.svg
+    - assets/icons/use_mask.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
