@@ -10,7 +10,7 @@ void main() {
     debugShowCheckedModeBanner: false,
   ));
 }
-
+/*
 class Covid19 extends StatefulWidget {
   @override
   _Covid19State createState() => _Covid19State();
@@ -54,3 +54,4 @@ class _Covid19State extends State<Covid19> {
     );
   }
 }
+*/

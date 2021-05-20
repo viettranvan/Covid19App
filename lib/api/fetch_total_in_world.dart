@@ -12,9 +12,9 @@ class FetchTotalInWorld{
     if(response.statusCode == 200) {
       final fetchData = jsonDecode(response.body);
       totalData = new TotalInWord(
-        total: "${fetchData["TotalConfirmed"]}",
-        death: "${fetchData["TotalDeaths"]}",
-        recovery: "${fetchData["TotalRecovered"]}",
+        totalConfirmed: "${fetchData["TotalConfirmed"]}",
+        totalDeaths: "${fetchData["TotalDeaths"]}",
+        totalRecovered: "${fetchData["TotalRecovered"]}",
       );
       print("$fetchData");
       return totalData;

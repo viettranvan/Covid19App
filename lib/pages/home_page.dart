@@ -1,6 +1,7 @@
 import 'package:covid_19/api/fetch_total_in_world.dart';
 import 'package:covid_19/models/total_in_world.dart';
 import 'package:covid_19/pages/covid19_information.dart';
+import 'package:covid_19/pages/covid_cases_in_the_world_page.dart';
 import 'package:covid_19/widgets/column_data.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,12 +48,19 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         Spacer(),
-                        Text(
-                          "Chi tiết",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
+                        InkWell(
+                          onTap: (){
+                            final pageRoute = MaterialPageRoute(builder: (context) => CovidCasesInTheWordPage());
+                            Navigator.of(context).push(pageRoute);
+                            //print("go to covid case in world pages");
+                          },
+                          child: Text(
+                            "Chi tiết",
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
                         )
                       ],
                     ),
@@ -86,19 +94,19 @@ class _HomePageState extends State<HomePage> {
                               ColumnData(
                                 imgDir: "assets/images/covid19.png",
                                 title: "Tổng số\nca Nhiễm ",
-                                number: formatter.format(int.parse("${data!.total}")),
+                                number: formatter.format(int.parse("${data!.totalConfirmed}")),
                                 color: Colors.blue,
                               ),
                               ColumnData(
                                 imgDir: "assets/images/death.png",
                                 title: "Số ca \ntử vong",
-                                number: formatter.format(int.parse("${data.death}")),
+                                number: formatter.format(int.parse("${data.totalDeaths}")),
                                 color: Colors.red,
                               ),
                               ColumnData(
                                 imgDir: "assets/images/recuperate.png",
                                 title: "Số ca \nhồi phục",
-                                number: formatter.format(int.parse("${data.recovery}")),
+                                number: formatter.format(int.parse("${data.totalRecovered}")),
                                 color: Colors.green,
                               ),
                             ],

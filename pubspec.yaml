@@ -63,10 +63,12 @@ flutter:
     - assets/images/motionless.jpg
     - assets/images/thermometer.jpg
     - assets/images/headache.png
+    - assets/images/cough.jpg
     - assets/images/tired.jpg
     - assets/images/sore_throat.png
     - assets/images/stomach.png
     - assets/images/eye.png
+    - assets/images/new.png
     - assets/images/nose.jpg
     - assets/images/red.png
     - assets/icons/coronadr.svg

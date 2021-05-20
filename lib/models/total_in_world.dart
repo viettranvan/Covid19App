@@ -1,8 +1,17 @@
 class TotalInWord{
-  final total;
-  final death;
-  final recovery;
+  final newConfirmed;
+  final totalConfirmed;
+  final newDeaths;
+  final totalDeaths;
+  final newRecovered;
+  final totalRecovered;
 
-  TotalInWord({this.total,this.death,this.recovery});
-  //TotalInWord(this.total, this.death, this.recovery);
+  TotalInWord({
+    this.newConfirmed,
+    this.totalConfirmed,
+    this.newDeaths,
+    this.totalDeaths,
+    this.newRecovered,
+    this.totalRecovered});
 }
+
