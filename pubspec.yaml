@@ -35,6 +35,8 @@ dev_dependencies:
   http: ^0.13.3
   flutter_svg: ^0.22.0
   intl: ^0.17.0
+  connectivity: ^3.0.4
+  flutter_offline: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,6 +73,7 @@ flutter:
     - assets/images/new.png
     - assets/images/nose.jpg
     - assets/images/red.png
+    - assets/images/worldmap_nobackground.png
     - assets/icons/coronadr.svg
     - assets/icons/nurse.svg
     - assets/icons/Clean_Disinfect.svg

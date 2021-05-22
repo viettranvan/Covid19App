@@ -2,12 +2,15 @@ import 'package:covid_19/api/fetch_total_in_world.dart';
 import 'package:covid_19/models/total_in_world.dart';
 import 'package:covid_19/pages/covid19_information.dart';
 import 'package:covid_19/pages/covid_cases_in_the_world_page.dart';
+import 'package:covid_19/pages/covid_country_list.dart';
 import 'package:covid_19/widgets/column_data.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,6 +27,17 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HeaderImage(imgDir: "assets/images/corona_mask.png",),
+
+              Center(
+                child: ElevatedButton(
+                  child: Text("Check Connection"),
+                    onPressed: () async {
+                      final result = await Connectivity().checkConnectivity();
+
+                      print("Your connection: $result");
+                    },
+                )
+              ),
               Column(
                 children: [
                   Container(
@@ -124,9 +138,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              SizedBox(
-                height: 20.0,
-              ),
+              SizedBox(height: 20.0,),
               Column(
                 children: [
                   Container(
@@ -144,12 +156,18 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         Spacer(),
-                        Text(
-                          "Chi tiết",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
+                        InkWell(
+                          onTap: (){
+                            final pageRoute = MaterialPageRoute(builder: (context)=>CovidCountryList());
+                            Navigator.of(context).push(pageRoute);
+                          },
+                          child: Text(
+                            "Chi tiết",
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
+                          ),
                         )
                       ],
                     ),
@@ -232,3 +250,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
