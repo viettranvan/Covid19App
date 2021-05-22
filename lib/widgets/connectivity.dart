@@ -25,14 +25,8 @@ class CheckConnectivity extends StatelessWidget {
                     duration: const Duration(microseconds: 300),
                     color: isConnected ? Color(0xFF00EE44) : Color(0xFFEE4400),
                     child: isConnected ?
-                    Center(
-                        child: SizedBox(
-                          height: 25.0,
-                          child: Text(
-                            "Đã có mạng trở lại",
-                            style: TextStyle(color: Colors.white, fontSize: 16.0),),
-                        )
-                    ):
+                    null
+                    :
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -62,8 +56,4 @@ class CheckConnectivity extends StatelessWidget {
     });
   }
 }
-/*
 
-
-
- */

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:covid_19/api/fetch_total_in_world.dart';
 import 'package:covid_19/models/total_in_world.dart';
 import 'package:covid_19/widgets/build_covid_card_item.dart';
 import 'package:covid_19/widgets/header_image.dart';
@@ -18,6 +19,7 @@ class CovidCasesInTheWordPage extends StatefulWidget {
 
 class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
 
+  FetchTotalInWorld fetchTotalInWorld = new FetchTotalInWorld();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: FutureBuilder<TotalInWord>(
-              future: fetchCovidAPI(),
+              future: fetchTotalInWorld.fetchDetailTotalInWorld(),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (snapshot.hasData) {
@@ -116,26 +118,6 @@ class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
   }
 }
 
-Future<TotalInWord> fetchCovidAPI() async {
-  TotalInWord totalInWord;
-  final url = Uri.parse("https://api.covid19api.com/summary");
-  final response = await http.get(url);
 
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    final global = data["Global"];
-    totalInWord = new TotalInWord(
-        newConfirmed: global["NewConfirmed"],
-        totalConfirmed: global["TotalConfirmed"],
-        newDeaths: global["NewDeaths"],
-        totalDeaths: global["TotalDeaths"],
-        newRecovered: global["NewRecovered"],
-        totalRecovered: global["TotalRecovered"]);
-    return totalInWord;
-  } else {
-    throw Exception();
-  }
-
-}
 
 
