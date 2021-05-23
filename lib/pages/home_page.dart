@@ -3,6 +3,7 @@ import 'package:covid_19/models/total_in_world.dart';
 import 'package:covid_19/pages/covid19_information.dart';
 import 'package:covid_19/pages/covid_cases_in_the_world_page.dart';
 import 'package:covid_19/pages/covid_country_list.dart';
+import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:covid_19/widgets/column_data.dart';
 import 'package:covid_19/widgets/connectivity.dart';
 import 'package:covid_19/widgets/header_image.dart';
@@ -10,8 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter_offline/flutter_offline.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,9 +19,53 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FetchTotalInWorld fetchTotalInWorld = new FetchTotalInWorld();
+
+  String formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Covid19"),
+            Container(
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(10.0)
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.calendar_today,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                  Text("$formattedDate"),
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: (){
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => super.widget));
+              },
+
+              child: SvgPicture.asset("assets/icons/reload.svg",height: 25,width: 25,color: Colors.white,),
+            ),
+          ],
+        ),
+        flexibleSpace: AppBarLinearGradient(),
+        //backgroundColor: Color(0xFF1519A7),
+
+      ),
       body: SafeArea(
         child: CheckConnectivity(
           childWidget: SingleChildScrollView(
@@ -31,140 +74,15 @@ class _HomePageState extends State<HomePage> {
                 HeaderImage(imgDir: "assets/images/corona_mask.png",),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Số ca nhiếm trên thế giới",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              Text(
-                                "19/05/2021",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          InkWell(
-                            onTap: (){
-                              final pageRoute = MaterialPageRoute(builder: (context) => CovidCasesInTheWordPage());
-                              Navigator.of(context).push(pageRoute);
-                              //print("go to covid case in world pages");
-                            },
-                            child: Text(
-                              "Chi tiết",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    _totalCaseInWorldTitleContainer(context),
                     SizedBox(
                       height: 15.0,
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      margin: EdgeInsets.symmetric(horizontal: 20.0),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          border: Border.all(width: 1.0, color: Colors.grey),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                offset: Offset(1, 5),
-                                color: Colors.grey,
-                                blurRadius: 3.0)
-                          ]),
-                      child: FutureBuilder<TotalInWord>(
-                        future: fetchTotalInWorld.fetchDataAllTheWorld(),
-                        builder: (context,snapshot){
-                          final data = snapshot.data;
-                          final formatter = new NumberFormat("###,###,###");
-                          if (snapshot.hasData) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ColumnData(
-                                  imgDir: "assets/images/covid19.png",
-                                  title: "Tổng số\nca Nhiễm ",
-                                  number: formatter.format(int.parse("${data!.totalConfirmed}")),
-                                  color: Colors.blue,
-                                ),
-                                ColumnData(
-                                  imgDir: "assets/images/death.png",
-                                  title: "Số ca \ntử vong",
-                                  number: formatter.format(int.parse("${data.totalDeaths}")),
-                                  color: Colors.red,
-                                ),
-                                ColumnData(
-                                  imgDir: "assets/images/recuperate.png",
-                                  title: "Số ca \nhồi phục",
-                                  number: formatter.format(int.parse("${data.totalRecovered}")),
-                                  color: Colors.green,
-                                ),
-                              ],
-                            );
-                          }
-                          else if (snapshot.hasError) {
-                            print("has error");
-                          }
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-
-                        },
-                      ),
-                    )
+                    _totalCaseInWorldData(fetchTotalInWorld),
                   ],
                 ),
                 SizedBox(height: 20.0,),
-                Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Các quốc gia ghi nhận",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          Spacer(),
-                          InkWell(
-                            onTap: (){
-                              final pageRoute = MaterialPageRoute(builder: (context)=>CovidCountryList());
-                              Navigator.of(context).push(pageRoute);
-                            },
-                            child: Text(
-                              "Chi tiết",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                _covidCountriesConfirmTitle(context),
                 SizedBox(height: 10.0),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -177,41 +95,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(20.0)),
                 ),
                 SizedBox(height: 10.0),
-                Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Thông tin về Covid-19",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                          Spacer(),
-                          InkWell(
-                            onTap: () {
-                              final pageRoute = MaterialPageRoute(builder: (context) => Covid19Information());
-                              Navigator.of(context).push(pageRoute);
-                            },
-                            child: Text(
-                              "Chi tiết",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                _covidInformation(context),
                 SizedBox(height: 20.0),
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -242,4 +126,171 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+Widget _totalCaseInWorldTitleContainer(BuildContext context) => Container(
+  padding: EdgeInsets.symmetric(horizontal: 20.0),
+  child: Row(
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Số ca nhiếm trên thế giới",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              )),
+          Text(
+            "19/05/2021",
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+                fontStyle: FontStyle.italic),
+          )
+        ],
+      ),
+      Spacer(),
+      InkWell(
+        onTap: (){
+          final pageRoute = MaterialPageRoute(builder: (context) => CovidCasesInTheWordPage());
+          Navigator.of(context).push(pageRoute);
+          //print("go to covid case in world pages");
+        },
+        child: Text(
+          "Chi tiết",
+          style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue),
+        ),
+      )
+    ],
+  ),
+);
+Widget _totalCaseInWorldData(FetchTotalInWorld fetchTotalInWorld) => Container(
+  padding: EdgeInsets.symmetric(vertical: 15.0),
+  margin: EdgeInsets.symmetric(horizontal: 20.0),
+  width: double.infinity,
+  decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      border: Border.all(width: 1.0, color: Colors.grey),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+            offset: Offset(1, 5),
+            color: Colors.grey,
+            blurRadius: 3.0)
+      ]),
+  child: FutureBuilder<TotalInWord>(
+    future: fetchTotalInWorld.fetchDataAllTheWorld(),
+    builder: (context,snapshot){
+      final data = snapshot.data;
+      final formatter = new NumberFormat("###,###,###");
+      if (snapshot.hasData) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ColumnData(
+              imgDir: "assets/images/covid19.png",
+              title: "Tổng số\nca Nhiễm ",
+              number: formatter.format(int.parse("${data!.totalConfirmed}")),
+              color: Colors.blue,
+            ),
+            ColumnData(
+              imgDir: "assets/images/death.png",
+              title: "Số ca \ntử vong",
+              number: formatter.format(int.parse("${data.totalDeaths}")),
+              color: Colors.red,
+            ),
+            ColumnData(
+              imgDir: "assets/images/recuperate.png",
+              title: "Số ca \nhồi phục",
+              number: formatter.format(int.parse("${data.totalRecovered}")),
+              color: Colors.green,
+            ),
+          ],
+        );
+      }
+      else if (snapshot.hasError) {
+        print("has error");
+      }
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+
+    },
+  ),
+);
+Widget _covidCountriesConfirmTitle(BuildContext context) => Column(
+  children: [
+    Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Các quốc gia ghi nhận",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
+          Spacer(),
+          InkWell(
+            onTap: (){
+              final pageRoute = MaterialPageRoute(builder: (context)=>CovidCountryList());
+              Navigator.of(context).push(pageRoute);
+            },
+            child: Text(
+              "Chi tiết",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
+          )
+        ],
+      ),
+    ),
+  ],
+);
+Widget _covidInformation(BuildContext context) => Column(
+  children: [
+    Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Thông tin về Covid-19",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
+          Spacer(),
+          InkWell(
+            onTap: () {
+              final pageRoute = MaterialPageRoute(builder: (context) => Covid19Information());
+              Navigator.of(context).push(pageRoute);
+            },
+            child: Text(
+              "Chi tiết",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
+          )
+        ],
+      ),
+    ),
+  ],
+);
+
+
+
 

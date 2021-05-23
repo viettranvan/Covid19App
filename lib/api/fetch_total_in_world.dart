@@ -16,7 +16,6 @@ class FetchTotalInWorld{
         totalDeaths: "${fetchData["TotalDeaths"]}",
         totalRecovered: "${fetchData["TotalRecovered"]}",
       );
-      print("$fetchData");
       return totalData;
 
     }else{

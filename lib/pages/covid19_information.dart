@@ -1,3 +1,4 @@
+import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:covid_19/widgets/col_symptom.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:covid_19/widgets/symptom_title.dart';
@@ -8,6 +9,10 @@ class Covid19Information extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Triệu chứng và biện pháp"),
+        flexibleSpace: AppBarLinearGradient(),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -18,18 +23,6 @@ class Covid19Information extends StatelessWidget {
                   HeaderImage(
                     imgDir: "assets/images/doctor.png",
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                        padding: EdgeInsets.only(top: 10.0, left: 10.0),
-                        child: Icon(
-                          Icons.keyboard_backspace_outlined,
-                          color: Colors.white,
-                          size: 30.0,
-                        )),
-                  )
                 ],
               ),
               SymptomTitle(title: "Triệu chứng nghiêm trọng",),

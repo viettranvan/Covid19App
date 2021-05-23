@@ -1,7 +1,11 @@
 import 'package:covid_19/api/fetch_total_country.dart';
 import 'package:covid_19/models/total_in_country.dart';
+import 'package:covid_19/pages/country_detail.dart';
+import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:intl/intl.dart';
 
 class CovidCountryList extends StatefulWidget {
   @override
@@ -10,44 +14,68 @@ class CovidCountryList extends StatefulWidget {
 
 class _CovidCountryListState extends State<CovidCountryList> {
   FetchTotalInCountry fetchTotalInCountry = new FetchTotalInCountry();
-  int? sortColumnIndex;
-  bool isAscending = false;
-  final _titleStyle = TextStyle(
-    fontSize: 18.0,
-    fontWeight: FontWeight.bold
-  );
+  final formatter = new NumberFormat("###,###,###");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Danh sách quốc gia ghi nhận"),
+        flexibleSpace: AppBarLinearGradient(),
+      ),
       body: SafeArea(
           child: FutureBuilder<List<TotalInCountry>>(
         future: fetchTotalInCountry.fetchDataInCountry(),
         builder: (context, snapshot) {
           List<TotalInCountry>? data = snapshot.data;
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            return Container(
+              margin: EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(color: Colors.grey, width: 1.0),
+              ),
               child: SingleChildScrollView(
-                child: DataTable(
-                  columns: [
-                    DataColumn(label: Text("Quốc gia",style: _titleStyle,)),
-                    DataColumn(label: Text("Tổng",style: _titleStyle)),
-                    DataColumn(label: Text("Tử vong",style: _titleStyle)),
-                    DataColumn(label: Text("Hồi Phục",style: _titleStyle)),
-                    DataColumn(label: Text(" ")),
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildColumnTitle("Quốc gia", 200.0),
+                        _buildColumnTitle("Tổng", 100.0),
+                        _buildColumnTitle("Tử vong", 100.0),
+                        _buildColumnTitle("Hồi phục", 100.0),
+                        _buildColumnTitle("Chi tiết", 100.0),
+                      ],
+                    ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: data!.map((item) {
+                            return Row(
+                              children: [
+                                _buildDataItem("${item.countryName}", 200.0, Colors.black),
+                                _buildDataItem(
+                                    "${formatter.format(int.parse("${item.totalConfirmed}"))}", 100.0,Colors.blue),
+                                _buildDataItem("${formatter.format(int.parse("${item.totalDeaths}"))}", 100.0,Colors.red),
+                                _buildDataItem(
+                                    "${formatter.format(int.parse("${item.totalRecovered}"))}", 100.0,Colors.green),
+                                InkWell(
+                                  child: _buildDataItem("Chi tiết", 100.0,Colors.blueAccent),
+                                  onTap: (){
+                                    final pageRoute = MaterialPageRoute(builder: (context) => CountryDetail(countryName: item.countryName));
+                                    Navigator.of(context).push(pageRoute);
+                                  },
+                                ),
+
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
                   ],
-                  rows: data!
-                      .map((item) => DataRow(cells: [
-                            DataCell(Text(item.countryName)),
-                            DataCell(Text(item.totalConfirmed)),
-                            DataCell(Text(item.totalDeaths)),
-                            DataCell(Text(item.totalRecovered)),
-                            DataCell(InkWell(
-                                onTap: () => print("${item.totalRecovered}"),
-                                child: Text("Chi Tiết",style: TextStyle(color: Colors.blue),))),
-                          ]))
-                      .toList(),
                 ),
               ),
             );
@@ -55,9 +83,36 @@ class _CovidCountryListState extends State<CovidCountryList> {
             print("has error");
           }
 
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator(),);
         },
       )),
     );
   }
+
+  Widget _buildColumnTitle(String title, double width) => Container(
+        width: width,
+        height: 50,
+        child: Center(
+          child: Text(
+            "$title",
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+
+  Widget _buildDataItem(String title, double width, Color color) => Container(
+    width: width,
+    height: 50,
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(
+        color: Colors.grey,width:2.0
+      ))
+    ),
+    child: Center(
+      child: Text(
+        "$title",
+        style: TextStyle(fontSize: 16.0,color: color),
+      ),
+    ),
+  );
 }

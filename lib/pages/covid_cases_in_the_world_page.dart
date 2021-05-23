@@ -3,13 +3,12 @@ import 'dart:convert';
 
 import 'package:covid_19/api/fetch_total_in_world.dart';
 import 'package:covid_19/models/total_in_world.dart';
+import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:covid_19/widgets/build_covid_card_item.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:http/http.dart' as http;
-
 
 class CovidCasesInTheWordPage extends StatefulWidget {
   @override
@@ -18,11 +17,15 @@ class CovidCasesInTheWordPage extends StatefulWidget {
 }
 
 class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
-
   FetchTotalInWorld fetchTotalInWorld = new FetchTotalInWorld();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: Text("Tình hình trên thế giới"),
+          centerTitle: true,
+          flexibleSpace: AppBarLinearGradient()),
       body: Container(
         decoration: BoxDecoration(
             color: Color(0xDA51116C),
@@ -39,15 +42,11 @@ class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
                 if (snapshot.hasData) {
                   return Column(
                     children: [
-
                       Stack(
                         children: [
                           HeaderImage(
                               imgDir:
                                   "assets/images/worldmap_nobackground.png"),
-                          IconButton(
-                              onPressed: ()=>Navigator.of(context).pop(),
-                              icon: Icon(Icons.keyboard_backspace_outlined, color: Colors.white,))
                         ],
                       ),
                       SizedBox(
@@ -117,7 +116,3 @@ class _CovidCasesInTheWordPageState extends State<CovidCasesInTheWordPage> {
     );
   }
 }
-
-
-
-
