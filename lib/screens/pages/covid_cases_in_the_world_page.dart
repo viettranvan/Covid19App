@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:covid_19/api/fetch_total_in_world.dart';
 import 'package:covid_19/models/total_in_world.dart';

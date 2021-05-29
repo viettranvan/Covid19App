@@ -49,27 +49,25 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomRight
           )
         ),
-        child: Expanded(
-          child: Column(
-            children: [
-              Image.asset("assets/images/splash_bg.png",height: 600,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Vui lòng chờ",style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0
-                  ),),
-                  SizedBox(width: 10.0,),
-                  SizedBox(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(color: Colors.white,),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            Image.asset("assets/images/splash_bg.png",height: 600,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Vui lòng chờ",style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0
+                ),),
+                SizedBox(width: 10.0,),
+                SizedBox(
+                  width: 20.0,
+                  height: 20.0,
+                  child: CircularProgressIndicator(color: Colors.white,),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

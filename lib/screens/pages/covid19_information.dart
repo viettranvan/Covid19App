@@ -1,9 +1,13 @@
+import 'package:covid_19/screens/pages/graphics.dart';
 import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:covid_19/widgets/col_symptom.dart';
 import 'package:covid_19/widgets/header_image.dart';
 import 'package:covid_19/widgets/symptom_title.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Covid19Information extends StatelessWidget {
   @override
@@ -25,88 +29,16 @@ class Covid19Information extends StatelessWidget {
                   ),
                 ],
               ),
-              SymptomTitle(title: "Triệu chứng nghiêm trọng",),
-              SizedBox(height: 10.0,),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                margin: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1.0,color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10.0)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ColumnSymptom(imgDir: "assets/images/shortness_of_breath.jpeg", titleSymptom: "Khó thở"),
-                    ColumnSymptom(imgDir: "assets/images/motionless.jpg", titleSymptom: "Mất khả năng nói \n hoặc cử động"),
-                    ColumnSymptom(imgDir: "assets/images/heart_attack.png", titleSymptom: "Đau hoặc \ntức ngực"),
-                  ],
-                ),
-
-              ),
-              SizedBox(height: 10.0,),
-              SymptomTitle(title: "Triệu chứng thường gặp",),
-              SizedBox(height: 10.0,),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                margin: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1.0,color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10.0)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ColumnSymptom(imgDir: "assets/images/thermometer.jpg", titleSymptom: "Sốt"),
-                    ColumnSymptom(imgDir: "assets/images/cough.jpg", titleSymptom: "Ho khan"),
-                    ColumnSymptom(imgDir: "assets/images/tired.jpg", titleSymptom: "Mệt mỏi"),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              SymptomTitle(title: "Triệu chứng ít gặp hơn",),
-              SizedBox(height: 10.0,),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                margin: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1.0,color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10.0)
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ColumnSymptom(imgDir: "assets/images/sore_throat.png", titleSymptom: "Đau họng"),
-                        ColumnSymptom(imgDir: "assets/images/headache.png", titleSymptom: "Đau nhức"),
-                        ColumnSymptom(imgDir: "assets/images/stomach.png", titleSymptom: "Tiêu chảy"),
-                      ],
-                    ),
-                    SizedBox(height: 10.0,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ColumnSymptom(imgDir: "assets/images/eye.png", titleSymptom: "Viêm kết mạc"),
-                        ColumnSymptom(imgDir: "assets/images/nose.jpg", titleSymptom: "Mất vị giác\nhoặc khứu giác"),
-                        ColumnSymptom(imgDir: "assets/images/red.png", titleSymptom: "Da nổi mẩn"),
-                      ],
-                    ),
-
-                  ],
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              SymptomTitle(title: "Biện pháp ngăn chặn",),
-              SizedBox(height: 10.0,),
-              buildPreventation(),
-              SizedBox(height: 10.0,),
-              buildHelpCard(context),
+              _buildImportantSymptom, // triệu chứng nghiêm trọng
               SizedBox(height: 20.0,),
+              _buildCommonSymptom, // triệu chứng thường gặp
+              SizedBox(height: 20.0,),
+              _buildUnCommonSymptom, // triệu chứng ít gặp hơn
+              SizedBox(height: 10.0,),
+              buildHelpCard(context), // Đường dây nóng ...
+              SizedBox(height: 10.0,),
+              _buildPreventiveMeasures, // biện pháp phòng ngừa
+
             ],
           ),
         ),
@@ -115,53 +47,99 @@ class Covid19Information extends StatelessWidget {
   }
 }
 
-Row buildPreventation() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      PreventitonCard(
-        svgSrc: "assets/icons/hand_wash.svg",
-        title: "Rửa tay thường xuyên",
-      ),
-      PreventitonCard(
-        svgSrc: "assets/icons/use_mask.svg",
-        title: "Mang Khẩu trang",
-      ),
-      PreventitonCard(
-        svgSrc: "assets/icons/Clean_Disinfect.svg",
-        title: "Khử trùng",
-      ),
-    ],
-  );
-}
-
-class PreventitonCard extends StatelessWidget {
-  final String svgSrc;
-  final String title;
-  const PreventitonCard({
-    required this.svgSrc,
-    required this.title,
-  }) ;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SvgPicture.asset(svgSrc),
-        Text(
-          title,
-          style:
-          Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.green),
-        )
+Widget _buildImportantSymptom = Card(
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+      side:  BorderSide(color: Color(0xdddbd4d4))
+  ),
+  margin: EdgeInsets.symmetric(horizontal: 15.0),
+  child: Container(
+    padding: EdgeInsets.all(10.0),
+    child: Column(
+      children: [
+        SymptomTitle(title: "Triệu chứng nghiêm trọng",),
+        SizedBox(height: 10.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ColumnSymptom(imgDir: "assets/images/shortness_of_breath.jpeg", titleSymptom: "Khó thở"),
+            ColumnSymptom(imgDir: "assets/images/motionless.jpg", titleSymptom: "Mất khả năng nói \n hoặc cử động"),
+            ColumnSymptom(imgDir: "assets/images/heart_attack.png", titleSymptom: "Đau hoặc \ntức ngực"),
+          ],
+        ),
       ],
-    );
-  }
-}
+    ),
+  ),
+);
+
+Widget _buildCommonSymptom = Card(
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+      side:  BorderSide(color: Color(0xdddbd4d4))
+  ),
+  margin: EdgeInsets.symmetric(horizontal: 15.0),
+  child: Container(
+    padding: EdgeInsets.all(10.0),
+    child: Column(
+      children: [
+        SymptomTitle(title: "Triệu chứng thường gặp",),
+        SizedBox(height: 10.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ColumnSymptom(imgDir: "assets/images/thermometer.jpg", titleSymptom: "Sốt"),
+            ColumnSymptom(imgDir: "assets/images/cough.jpg", titleSymptom: "Ho khan"),
+            ColumnSymptom(imgDir: "assets/images/tired.jpg", titleSymptom: "Mệt mỏi"),
+          ],
+        ),
+      ],
+    ),
+  ),
+);
+
+Widget _buildUnCommonSymptom = Card(
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+      side:  BorderSide(color: Color(0xdddbd4d4))
+  ),
+  margin: EdgeInsets.symmetric(horizontal: 15.0),
+  child: Container(
+    padding: EdgeInsets.all(10.0),
+    child: Column(
+      children: [
+        SymptomTitle(title: "Triệu chứng ít gặp hơn",),
+        SizedBox(height: 10.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ColumnSymptom(imgDir: "assets/images/sore_throat.png", titleSymptom: "Đau họng"),
+            ColumnSymptom(imgDir: "assets/images/headache.png", titleSymptom: "Đau nhức"),
+            ColumnSymptom(imgDir: "assets/images/stomach.png", titleSymptom: "Tiêu chảy"),
+          ],
+        ),
+        SizedBox(height: 10.0,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ColumnSymptom(imgDir: "assets/images/eye.png", titleSymptom: "Viêm kết mạc"),
+            ColumnSymptom(imgDir: "assets/images/nose.jpg", titleSymptom: "Mất vị giác\nhoặc khứu giác"),
+            ColumnSymptom(imgDir: "assets/images/red.png", titleSymptom: "Da nổi mẩn"),
+          ],
+        ),
+      ],
+    ),
+  ),
+);
 
 Container buildHelpCard(BuildContext context) {
   return Container(
     height: 150,
     width: double.infinity,
+    margin: EdgeInsets.symmetric(horizontal: 15.0),
     child: Stack(
       alignment: Alignment.bottomLeft,
       children: <Widget>[
@@ -187,14 +165,14 @@ Container buildHelpCard(BuildContext context) {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "Dial 999 for \nMedical Help!\n",
+                  text: "Đường dây nóng\n1900.90.95\n",
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
                       .copyWith(color: Colors.white),
                 ),
                 TextSpan(
-                  text: "If any symptoms appear",
+                  text: "Gọi ngay nếu bạn gặp các triệu chứng trên\n",
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                   ),
@@ -216,3 +194,64 @@ Container buildHelpCard(BuildContext context) {
     ),
   );
 }
+
+Widget _buildPreventiveMeasures = Card(
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+      side: BorderSide(color: Color(0xdddbd4d4))
+  ),
+  margin: EdgeInsets.symmetric(horizontal: 10.0),
+  child: Container(
+    padding: EdgeInsets.all(10.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SymptomTitle(title: "Biện pháp ngăn chặn",),
+        SizedBox(height: 10.0,),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              _buildMeasureItem(Graphics.measure1),
+              _buildMeasureItem(Graphics.measure2),
+              _buildMeasureItem(Graphics.measure3),
+              _buildMeasureItem(Graphics.measure4),
+              _buildMeasureItem(Graphics.measure5),
+              _buildMeasureItem(Graphics.measure6),
+              _buildMeasureItem(Graphics.measure7),
+              _buildMeasureItem(Graphics.measure8),
+              _buildMeasureItem(Graphics.measure9),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+
+Widget _buildMeasureItem(String imageURL) => CachedNetworkImage(
+  imageUrl: imageURL,
+  placeholder: (context, url) => Center(child: SizedBox(child: CircularProgressIndicator(),height: 50,width: 50,),),
+  imageBuilder: (context, imageProvider) => Container(
+    margin: EdgeInsets.only(right: 10.0),
+    width: 180,
+    height: 250,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        image: imageProvider,
+        fit: BoxFit.cover
+      ),
+      borderRadius: BorderRadius.circular(10.0),
+      border: Border.all(
+          width: 1.0,
+          color:Color(0xffc2b3b3)
+      ),
+    ),
+  )
+);
+
+
+
+
+
+
