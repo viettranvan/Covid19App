@@ -4,10 +4,9 @@ class ColumnData extends StatelessWidget {
 
   final String imgDir;
   final String title;
-  final String number;
-  final Color color;
+  final Widget number;
 
-  ColumnData({required this.imgDir,required this.title,required this.number, required this.color});
+  ColumnData({required this.imgDir,required this.title,required this.number});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,11 +18,7 @@ class ColumnData extends StatelessWidget {
           fontStyle: FontStyle.italic
         ),),
         SizedBox(height: 5.0,),
-        Text(this.number,style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-          color: color
-        ),)
+        this.number
       ],
     );
   }

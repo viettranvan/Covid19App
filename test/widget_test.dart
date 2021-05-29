@@ -5,15 +5,18 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:covid_19/pages/home_page.dart';
+import 'package:covid_19/models/total_in_world.dart';
+import 'package:covid_19/screens/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 
 void main() {
+  TotalInWord totalInWord = new TotalInWord();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(HomePage());
+
+    await tester.pumpWidget(HomePage(totalInWord: totalInWord,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

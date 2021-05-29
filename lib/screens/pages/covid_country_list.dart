@@ -1,6 +1,6 @@
 import 'package:covid_19/api/fetch_total_country.dart';
 import 'package:covid_19/models/total_in_country.dart';
-import 'package:covid_19/pages/country_detail.dart';
+import 'package:covid_19/screens/pages/country_detail.dart';
 import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
