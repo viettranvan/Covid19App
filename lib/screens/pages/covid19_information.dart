@@ -1,4 +1,3 @@
-import 'package:covid_19/screens/pages/graphics.dart';
 import 'package:covid_19/widgets/appbar_linergradient.dart';
 import 'package:covid_19/widgets/col_symptom.dart';
 import 'package:covid_19/widgets/header_image.dart';
@@ -8,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import '../graphics.dart';
 
 class Covid19Information extends StatelessWidget {
   @override
@@ -63,9 +64,9 @@ Widget _buildImportantSymptom = Card(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ColumnSymptom(imgDir: "assets/images/shortness_of_breath.jpeg", titleSymptom: "Khó thở"),
-            ColumnSymptom(imgDir: "assets/images/motionless.jpg", titleSymptom: "Mất khả năng nói \n hoặc cử động"),
-            ColumnSymptom(imgDir: "assets/images/heart_attack.png", titleSymptom: "Đau hoặc \ntức ngực"),
+            ColumnSymptom(imgUrl: Graphics.shortness_of_breath, titleSymptom: "Khó thở"),
+            ColumnSymptom(imgUrl: Graphics.motionless, titleSymptom: "Mất khả năng nói \n hoặc cử động"),
+            ColumnSymptom(imgUrl: Graphics.heart_attack, titleSymptom: "Đau hoặc \ntức ngực"),
           ],
         ),
       ],
@@ -89,9 +90,9 @@ Widget _buildCommonSymptom = Card(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ColumnSymptom(imgDir: "assets/images/thermometer.jpg", titleSymptom: "Sốt"),
-            ColumnSymptom(imgDir: "assets/images/cough.jpg", titleSymptom: "Ho khan"),
-            ColumnSymptom(imgDir: "assets/images/tired.jpg", titleSymptom: "Mệt mỏi"),
+            ColumnSymptom(imgUrl: Graphics.thermometer, titleSymptom: "Sốt"),
+            ColumnSymptom(imgUrl: Graphics.cough, titleSymptom: "Ho khan"),
+            ColumnSymptom(imgUrl: Graphics.tired, titleSymptom: "Mệt mỏi"),
           ],
         ),
       ],
@@ -115,9 +116,9 @@ Widget _buildUnCommonSymptom = Card(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ColumnSymptom(imgDir: "assets/images/sore_throat.png", titleSymptom: "Đau họng"),
-            ColumnSymptom(imgDir: "assets/images/headache.png", titleSymptom: "Đau nhức"),
-            ColumnSymptom(imgDir: "assets/images/stomach.png", titleSymptom: "Tiêu chảy"),
+            ColumnSymptom(imgUrl: Graphics.sore_throat, titleSymptom: "Đau họng"),
+            ColumnSymptom(imgUrl: Graphics.headache, titleSymptom: "Đau nhức"),
+            ColumnSymptom(imgUrl: Graphics.stomach, titleSymptom: "Tiêu chảy"),
           ],
         ),
         SizedBox(height: 10.0,),
@@ -125,9 +126,9 @@ Widget _buildUnCommonSymptom = Card(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ColumnSymptom(imgDir: "assets/images/eye.png", titleSymptom: "Viêm kết mạc"),
-            ColumnSymptom(imgDir: "assets/images/nose.jpg", titleSymptom: "Mất vị giác\nhoặc khứu giác"),
-            ColumnSymptom(imgDir: "assets/images/red.png", titleSymptom: "Da nổi mẩn"),
+            ColumnSymptom(imgUrl: Graphics.eye, titleSymptom: "Viêm kết mạc"),
+            ColumnSymptom(imgUrl: Graphics.nose, titleSymptom: "Mất vị giác\nhoặc khứu giác"),
+            ColumnSymptom(imgUrl: Graphics.red, titleSymptom: "Da nổi mẩn"),
           ],
         ),
       ],
@@ -247,7 +248,8 @@ Widget _buildMeasureItem(String imageURL) => CachedNetworkImage(
           color:Color(0xffc2b3b3)
       ),
     ),
-  )
+  ),
+  errorWidget: (context, url, error) => new Icon(Icons.error),
 );
 
 

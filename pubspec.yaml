@@ -39,6 +39,7 @@ dev_dependencies:
   flutter_offline: ^2.0.0
   horizontal_data_table: ^3.3.0
   cached_network_image: ^3.0.0
+  store_redirect: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,19 +63,7 @@ flutter:
     - assets/images/recuperate.png
     - assets/images/covid19_Info.png
     - assets/images/doctor.png
-    - assets/images/shortness_of_breath.jpeg
-    - assets/images/heart_attack.png
-    - assets/images/motionless.jpg
-    - assets/images/thermometer.jpg
-    - assets/images/headache.png
-    - assets/images/cough.jpg
-    - assets/images/tired.jpg
-    - assets/images/sore_throat.png
-    - assets/images/stomach.png
-    - assets/images/eye.png
     - assets/images/new.png
-    - assets/images/nose.jpg
-    - assets/images/red.png
     - assets/images/worldmap_nobackground.png
     - assets/icons/coronadr.svg
     - assets/icons/nurse.svg
@@ -84,6 +73,7 @@ flutter:
     - assets/icons/virus.svg
     - assets/icons/reload.svg
     - assets/images/splash_bg.png
+    - assets/images/bluezone.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
