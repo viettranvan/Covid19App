@@ -12,6 +12,7 @@ import 'covid19_information.dart';
 import 'covid_cases_in_the_world_page.dart';
 import 'covid_country_list.dart';
 import 'package:store_redirect/store_redirect.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,6 +37,120 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _installBluezone = Stack(
+      children: [
+        Image.asset(
+          "assets/images/bluezone.png",
+          width: double.infinity,
+          height: 120,
+          fit: BoxFit.cover,
+        ),
+        Container(
+            padding: EdgeInsets.only(top: 10.0),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                "Hãy cài đặt ngay ứng dụng",
+                style: TextStyle(color: Colors.white),
+              ),
+            )),
+        Positioned(
+          bottom: 5.0,
+          right: 130.0,
+          child: InkWell(
+            onTap: () {
+              print("install bluezone");
+              openStore();
+            },
+            child: Container(
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3.0),
+                  border: Border.all(width: 1.0)),
+              child: Text(
+                "Cài đặt ngay",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+
+    Widget _healthDeclaration = Stack(
+      children: [
+        Container(
+            height: 120,
+            width: double.infinity,
+            color: Color(0xff564de8),
+            child: Image.asset(
+              "assets/images/covid_defender.png",
+              fit: BoxFit.fitHeight,
+            )),
+        Container(
+          height: 120,
+          width: 120,
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text(
+                "Thực hiện khai báo y tế tại https://tokhaiyte.vn",
+                style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Container(
+                padding: EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0, color: Colors.black),
+                    borderRadius: BorderRadius.circular(3.0)),
+                child: InkWell(
+                  onTap: () => openLink(),
+                  child: Text(
+                    "Khai báo ngay",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Positioned(
+            right: 0.0,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: 120,
+              height: 120,
+              child: Column(
+                children: [
+                  Text(
+                    "Gọi ngay đường dây nóng",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    "1900.90.95",
+                    style: TextStyle(
+                        color: Colors.yellow,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  InkWell(
+                    onTap: () => openPhoneCall(),
+                      child: Image.asset(
+                    "assets/images/phone_icon.png",
+                    height: 40,
+                    width: 40,
+                  )),
+                ],
+              ),
+            ))
+      ],
+    );
+
     return Scaffold(
       appBar: _buildAppBar(context),
       body: SafeArea(
@@ -63,43 +178,14 @@ class _HomePageState extends State<HomePage> {
                   _recognizedCountries(context, "assets/images/worldmap.jpg"),
                   // các quốc gia ghi nhận
                   SizedBox(height: 10.0),
-                  _covidInformation(context),
+                  _covidInformation(context), // thông tin về covid-19
                   // thông tin về Covid-19
                   SizedBox(height: 20.0),
-                  Stack(
-                    children: [
-                      Image.asset(
-                        "assets/images/bluezone.png", width: double.infinity,
-                        height: 120,
-                        fit: BoxFit.cover,),
-                      Container(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text("Hãy cài đặt ngay ứng dụng",
-                              style: TextStyle(color: Colors.white),),
-                          )
-                      ),
-                      Positioned(
-                        bottom: 5.0,
-                        right: 130.0,
-                        child: InkWell(
-                          onTap: (){
-                            print("install bluezone");
-                            openStore();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3.0),
-                              border: Border.all(width: 1.0)
-                            ),
-                            child: Text("Cài đặt ngay",style: TextStyle(color: Colors.white),),
-                          ),
-                        ),
-                      )
-                    ],
+                  _healthDeclaration, // khao bao y te
+                  SizedBox(
+                    height: 5.0,
                   ),
+                  _installBluezone, // cai dat bluezone
                 ],
               ),
             ),
@@ -115,6 +201,13 @@ Future<void> openStore() async {
       androidAppId: 'com.mic.bluezone', iOSAppId: '1508062685');
 }
 
+void openLink() {
+  launch("https://tokhaiyte.vn/");
+}
+
+void openPhoneCall(){
+  launch("tel://19009095");
+}
 
 PreferredSizeWidget _buildAppBar(BuildContext context) {
   String formattedDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -157,15 +250,10 @@ Widget _numberCaseInTheWorld(BuildContext context, TotalInWord totalData) =>
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(width: 1.0),
-          gradient: LinearGradient(
-              colors: [
-                Color(0xffd6a6ea),
-                Color(0xff691c7b),
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft
-          )
-      ),
+          gradient: LinearGradient(colors: [
+            Color(0xffd6a6ea),
+            Color(0xff691c7b),
+          ], begin: Alignment.topRight, end: Alignment.bottomLeft)),
       child: Column(
         children: [
           _totalCaseInWorldTitleContainer(context),
@@ -190,8 +278,7 @@ Widget _totalCaseInWorldTitleContainer(BuildContext context) {
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xffffffff)
-                )),
+                    color: Color(0xffffffff))),
             Text(
               "$formattedDate",
               style: TextStyle(
@@ -205,9 +292,7 @@ Widget _totalCaseInWorldTitleContainer(BuildContext context) {
         Container(
           padding: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: Colors.white
-          ),
+              borderRadius: BorderRadius.circular(5.0), color: Colors.white),
           child: InkWell(
             onTap: () {
               final pageRoute = MaterialPageRoute(
@@ -225,7 +310,6 @@ Widget _totalCaseInWorldTitleContainer(BuildContext context) {
             ),
           ),
         ),
-
       ],
     ),
   );
@@ -252,31 +336,30 @@ Widget _totalCaseInWorldContainer(TotalInWord totalInWord) {
             number: totalInWord.totalRecovered != null
                 ? _textData(int.parse(totalInWord.totalConfirmed), Colors.blue)
                 : CircularProgressIndicator(
-              color: Colors.blue,
-            )),
+                    color: Colors.blue,
+                  )),
         ColumnData(
             imgDir: "assets/images/death.png",
             title: "Số ca \ntử vong",
             number: totalInWord.totalRecovered != null
                 ? _textData(int.parse(totalInWord.totalDeaths), Colors.red)
                 : CircularProgressIndicator(
-              color: Colors.red,
-            )),
+                    color: Colors.red,
+                  )),
         ColumnData(
             imgDir: "assets/images/recuperate.png",
             title: "Số ca \nhồi phục",
             number: totalInWord.totalRecovered != null
                 ? _textData(int.parse(totalInWord.totalRecovered), Colors.green)
                 : CircularProgressIndicator(
-              color: Colors.green,
-            )),
+                    color: Colors.green,
+                  )),
       ],
     ),
   );
 }
 
-Widget _recognizedCountries(BuildContext context, String imagePath) =>
-    Card(
+Widget _recognizedCountries(BuildContext context, String imagePath) => Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -306,11 +389,10 @@ Widget _textData(int number, Color color) {
   final formatter = new NumberFormat("###,###,###");
   return Text(formatter.format(number),
       style:
-      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: color));
+          TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: color));
 }
 
-Widget _covidCountriesConfirmTitle(BuildContext context) =>
-    Column(
+Widget _covidCountriesConfirmTitle(BuildContext context) => Column(
       children: [
         Container(
           padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -319,17 +401,14 @@ Widget _covidCountriesConfirmTitle(BuildContext context) =>
               Container(
                 width: 7.0,
                 height: 25.0,
-                decoration: BoxDecoration(
-                    color: Color(0xff4ce547)
-                ),
+                decoration: BoxDecoration(color: Color(0xff4ce547)),
               ),
               SizedBox(width: 8.0),
               Text("Các quốc gia ghi nhận".toUpperCase(),
                   style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xff5e19e2)
-                  )),
+                      color: Color(0xff5e19e2))),
               Spacer(),
               InkWell(
                 onTap: () {
@@ -343,9 +422,7 @@ Widget _covidCountriesConfirmTitle(BuildContext context) =>
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
                       color: Colors.blue,
-                      fontStyle: FontStyle.italic
-                  )
-                  ,
+                      fontStyle: FontStyle.italic),
                 ),
               )
             ],
@@ -354,12 +431,8 @@ Widget _covidCountriesConfirmTitle(BuildContext context) =>
       ],
     );
 
-
-Widget _covidInformation(BuildContext context) =>
-    Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-      ),
+Widget _covidInformation(BuildContext context) => Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       margin: EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -372,17 +445,14 @@ Widget _covidInformation(BuildContext context) =>
                   Container(
                     width: 7.0,
                     height: 25.0,
-                    decoration: BoxDecoration(
-                        color: Color(0xff4ce547)
-                    ),
+                    decoration: BoxDecoration(color: Color(0xff4ce547)),
                   ),
                   SizedBox(width: 8.0),
                   Text("Thông tin về Covid-19".toUpperCase(),
                       style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xff5e19e2)
-                      )),
+                          color: Color(0xff5e19e2))),
                   Spacer(),
                   InkWell(
                     onTap: () {
@@ -396,14 +466,15 @@ Widget _covidInformation(BuildContext context) =>
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
                           color: Colors.blue,
-                          fontStyle: FontStyle.italic
-                      ),
+                          fontStyle: FontStyle.italic),
                     ),
                   )
                 ],
               ),
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.0),
                 height: 160.0,

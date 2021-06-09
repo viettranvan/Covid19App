@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       _fetchData();
 
       Timer(Duration(seconds: 3),() =>
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => HomePage(totalInWord: data,))
           )
       );
