@@ -216,7 +216,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Covid19"),
+        Text("Covid-19"),
         Container(
           padding: EdgeInsets.all(5.0),
           decoration: BoxDecoration(

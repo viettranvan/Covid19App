@@ -55,20 +55,39 @@ class _CovidCountryListState extends State<CovidCountryList> {
                           children: data!.map((item) {
                             return Row(
                               children: [
-                                _buildDataItem("${item.countryName}", 200.0, Colors.black),
                                 _buildDataItem(
-                                    "${formatter.format(int.parse("${item.totalConfirmed}"))}", 100.0,Colors.blue),
-                                _buildDataItem("${formatter.format(int.parse("${item.totalDeaths}"))}", 100.0,Colors.red),
+                                    "${item.countryName}", 200.0, Colors.black),
                                 _buildDataItem(
-                                    "${formatter.format(int.parse("${item.totalRecovered}"))}", 100.0,Colors.green),
+                                    "${formatter.format(int.parse("${item.totalConfirmed}"))}",
+                                    100.0,
+                                    Colors.blue),
+                                _buildDataItem(
+                                    "${formatter.format(int.parse("${item.totalDeaths}"))}",
+                                    100.0,
+                                    Colors.red),
+                                _buildDataItem(
+                                    "${formatter.format(int.parse("${item.totalRecovered}"))}",
+                                    100.0,
+                                    Colors.green),
                                 InkWell(
-                                  child: _buildDataItem("Chi tiết", 100.0,Colors.blueAccent),
-                                  onTap: (){
-                                    final pageRoute = MaterialPageRoute(builder: (context) => CountryDetail(countryName: item.countryName));
+                                  child: _buildDataItem(
+                                      "Chi tiết", 100.0, Colors.blueAccent),
+                                  onTap: () {
+                                    TotalInCountry country = new TotalInCountry(
+                                        countryName: item.countryName,
+                                        newConfirmed: item.newConfirmed,
+                                        totalConfirmed: item.totalConfirmed,
+                                        newDeaths: item.newDeaths,
+                                        totalDeaths: item.totalDeaths,
+                                        newRecovered: item.newRecovered,
+                                        totalRecovered: item.totalRecovered,
+                                        date: item.date);
+                                    final pageRoute = MaterialPageRoute(
+                                        builder: (context) => CountryDetail(
+                                            countryDetail: country));
                                     Navigator.of(context).push(pageRoute);
                                   },
                                 ),
-
                               ],
                             );
                           }).toList(),
@@ -83,7 +102,9 @@ class _CovidCountryListState extends State<CovidCountryList> {
             print("has error");
           }
 
-          return Center(child: CircularProgressIndicator(),);
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       )),
     );
@@ -101,18 +122,15 @@ class _CovidCountryListState extends State<CovidCountryList> {
       );
 
   Widget _buildDataItem(String title, double width, Color color) => Container(
-    width: width,
-    height: 50,
-    decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(
-        color: Colors.grey,width:2.0
-      ))
-    ),
-    child: Center(
-      child: Text(
-        "$title",
-        style: TextStyle(fontSize: 16.0,color: color),
-      ),
-    ),
-  );
+        width: width,
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey, width: 2.0))),
+        child: Center(
+          child: Text(
+            "$title",
+            style: TextStyle(fontSize: 16.0, color: color),
+          ),
+        ),
+      );
 }

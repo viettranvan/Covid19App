@@ -43,7 +43,7 @@ class CheckConnectivity extends StatelessWidget {
                           child: CircularProgressIndicator(
                             strokeWidth: 3.0,
                           ),
-                        )
+                        ),
                       ],
                     ),
                   )
